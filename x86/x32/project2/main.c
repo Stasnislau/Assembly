@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void emphasize8(void *img, int width, int height);
+void emphasize8(void *img, int width, int height, int stride);
 
 int main()
 {
@@ -20,17 +20,19 @@ int main()
     fread(file_header, 1, 54, fp);
     int fileSize = *(int *)(file_header + 2);
     int fileHeight = *(int *)(file_header + 22); 
-    int fileWidth = *(int *)(file_header + 18);  
+    int fileWidth = *(int *)(file_header + 18);
+    int stride = (fileWidth * 8 + 31) / 32 * 4;
     printf("file size: %d\n", fileSize);
     printf("file width: %d\n", fileWidth);
     printf("file height: %d\n", fileHeight);
+    printf("stride: %d\n", stride);
 
     // read image data
     img = (char *)malloc(fileSize - 54);
     fread(img, 1, fileSize - 54, fp);
     fclose(fp);
 
-    // emphasize8(img, width, height);
+    emphasize8(img, width, height, stride);
 
     fp = fopen("output.bmp", "wb");
     fwrite(file_header, 1, 54, fp);

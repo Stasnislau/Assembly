@@ -9,10 +9,13 @@ emphasize8: ; Enhance the dynamic range of 8 bpp grayscale image so that the dar
 
     xor     esi, esi
 
-    mov     ebx, [ebp + 8]
+    mov     ebx, [ebp + 8] ; image
     
-    mov     eax, [ebp + 12]
+    mov     eax, [ebp + 12] ; width
+
+    mov     ecx, [ebp + 16] ; height
     
+    mov     edx, [ebp + 20] ; stride
 
 
 return:
