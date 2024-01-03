@@ -1,0 +1,89 @@
+     1                                      section .text 
+     2                                      global  change_string
+     3                                  change_string: ; we recieve a string and a number, need put all the numbers to this sctring as chars
+     4 00000000 55                          push    ebp
+     5 00000001 89E5                        mov     ebp, esp
+     6                                  
+     7 00000003 53                          push    ebx ; stores pointer to string
+     8 00000004 56                          push    esi ; stores the sign
+     9                                  
+    10 00000005 31F6                        xor     esi, esi
+    11                                  
+    12 00000007 8B5D08                      mov     ebx, [ebp + 8]
+    13                                      
+    14 0000000A 8B450C                      mov     eax, [ebp + 12]
+    15                                  
+    16 0000000D 85C0                        test    eax, eax
+    17 0000000F 783B                        js      negative
+    18                                  
+    19                                  convert_loop:
+    20 00000011 31D2                        xor edx, edx
+    21 00000013 B90A000000                  mov ecx, 10 
+    22 00000018 F7F1                        div ecx               
+    23 0000001A 83C230                      add     edx, '0' 
+    24 0000001D 8813                        mov     byte [ebx], dl
+    25 0000001F 43                          inc     ebx
+    26 00000020 85C0                        test    eax, eax
+    27 00000022 75ED                        jnz     convert_loop
+    28                                  
+    29 00000024 C60300                      mov   byte [ebx], 0
+    30 00000027 8B4D08                      mov   ecx, [ebp + 8]
+    31 0000002A 85C9                        test  ecx, ecx
+    32 0000002C 7417                        jz    return
+    33 0000002E 4B                          dec   ebx
+    34                                  
+    35                                  reverse_string:
+    36 0000002F 39D9                        cmp  ecx, ebx
+    37 00000031 7200                        jb   swap
+    38                                  
+    39                                  swap: 
+    40 00000033 8A01                        mov  al, [ecx]
+    41 00000035 8A13                        mov  dl, [ebx]
+    42 00000037 8811                        mov  byte [ecx], dl
+    43 00000039 8803                        mov  byte [ebx], al
+    44 0000003B 41                          inc  ecx
+    45 0000003C 4B                          dec  ebx
+    46 0000003D 39D9                        cmp  ecx, ebx
+    47 0000003F 76F2                        jbe  swap
+    48                                  
+    49 00000041 85F6                        test esi, esi
+    50 00000043 750E                        jnz  add_minus
+    51                                  
+    52                                  return:
+    53 00000045 8B4508                      mov    eax, [ebp + 8]
+    54 00000048 5E                          pop    esi
+    55 00000049 5B                          pop    ebx
+    56 0000004A 5D                          pop    ebp  
+    57 0000004B C3                          ret
+    58                                  
+    59                                  negative:
+    60 0000004C BE01000000                  mov     esi, 1
+    61 00000051 EBBE                        jmp     convert_loop
+    62                                  
+    63                                  add_minus: 
+    64 00000053 8B5D08                      mov     ebx, [ebp + 8]
+    65 00000056 8B33                        mov     esi, [ebx]
+    66 00000058 C6032D                      mov     byte [ebx], '-'
+    67                                  
+    68                                  go_to_end:
+    69 0000005B 43                          inc     ebx
+    70 0000005C 85DB                        test    ebx, ebx
+    71 0000005E 75FB                        jnz     go_to_end
+    72 00000060 4B                          dec     ebx
+    73 00000061 8A03                        mov     al, [ebx]
+    74 00000063 884301                      mov     byte [ebx + 1], al
+    75 00000066 C60300                      mov     byte [ebx], 0
+    76                                  
+    77                                  shift_right: 
+    78 00000069 8A43FF                      mov  al, [ebx-1]
+    79 0000006C 3C2D                        cmp  al, '-'
+    80 0000006E 7407                        je   add_remaining_number
+    81 00000070 8803                        mov  byte [ebx], al
+    82 00000072 C643FF00                    mov  byte [ebx-1], 0
+    83 00000076 4B                          dec  ebx
+    84                                      
+    85                                  add_remaining_number:
+    86 00000077 8A06                        mov     al, [esi]
+    87 00000079 8803                        mov     byte [ebx], al
+    88 0000007B EBC8                        jmp     return
+    89                                  

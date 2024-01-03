@@ -1,0 +1,62 @@
+     1                                      section .text 
+     2                                      global  change_string
+     3                                  change_string: 
+     4 00000000 55                          push    ebp
+     5 00000001 89E5                        mov     ebp, esp
+     6                                  
+     7 00000003 8B4D08                      mov     ecx, [ebp + 8]
+     8 00000006 53                          push    ebx ; stores the sign
+     9                                  
+    10 00000007 31DB                        xor     ebx, ebx
+    11 00000009 31C0                        xor     eax, eax ; stores value to return
+    12 0000000B 31D2                        xor     edx, edx ; stores the character
+    13                                  
+    14                                  ordinary_traverse: 
+    15 0000000D 8A11                        mov     dl, [ecx]
+    16 0000000F 84D2                        test    dl, dl
+    17 00000011 743B                        jz      finish
+    18 00000013 80FA2D                      cmp     dl, '-'
+    19 00000016 7408                        je      consider_minus
+    20 00000018 80FA39                      cmp     dl, '9'
+    21 0000001B 760B                        jbe     detect_digit
+    22 0000001D 41                          inc     ecx
+    23 0000001E EBED                        jmp     ordinary_traverse
+    24                                  
+    25                                  consider_minus: 
+    26 00000020 BB01000000                  mov     ebx, 1
+    27 00000025 41                          inc     ecx
+    28 00000026 EBE5                        jmp    ordinary_traverse
+    29                                  
+    30                                  detect_digit:
+    31 00000028 41                          inc   ecx
+    32 00000029 80FA30                      cmp   dl, '0'
+    33 0000002C 72DF                        jb   ordinary_traverse
+    34 0000002E 83EA30                      sub  edx , '0'
+    35 00000031 89D0                        mov eax, edx
+    36                                  
+    37                                  traverse_digits:
+    38 00000033 8A11                        mov     dl, [ecx]
+    39 00000035 84D2                        test    dl, dl
+    40 00000037 7415                        jz      finish
+    41 00000039 80FA39                      cmp     dl, '9'
+    42 0000003C 7710                        ja      finish
+    43 0000003E 80FA30                      cmp     dl, '0'
+    44 00000041 720B                        jb      finish
+    45 00000043 41                          inc     ecx
+    46 00000044 83EA30                      sub     edx, '0'
+    47 00000047 6BC00A                      imul    eax, 10
+    48 0000004A 01D0                        add     eax, edx ; segmantation fault here
+    49 0000004C EBE5                        jmp     traverse_digits
+    50                                  
+    51                                  finish: 
+    52 0000004E 85DB                        test    ebx, ebx
+    53 00000050 7402                        jz      return
+    54 00000052 F7D8                        neg     eax
+    55                                  
+    56                                  return:
+    57 00000054 5B                          pop    ebx
+    58 00000055 5D                          pop    ebp  
+    59 00000056 C3                          ret
+    60                                  
+    61                                  
+    62                                  

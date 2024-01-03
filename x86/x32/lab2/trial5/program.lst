@@ -1,0 +1,73 @@
+     1                                      section .text
+     2                                      global  change_string
+     3                                  change_string:
+     4 00000000 55                          push    ebp
+     5 00000001 89E5                        mov     ebp, esp
+     6                                  
+     7 00000003 53                          push    ebx
+     8 00000004 56                          push    esi 
+     9 00000005 8B4D08                      mov     ecx, [ebp + 8]
+    10                                  
+    11 00000008 31F6                        xor     esi, esi ; pointer to longest
+    12 0000000A 31DB                        xor     ebx, ebx ; bh = longest
+    13 0000000C 31C0                        xor     eax, eax ; ah = current length
+    14 0000000E 31D2                        xor     edx, edx ; pointer to current
+    15                                  
+    16                                  calculate_longest: 
+    17 00000010 8A01                        mov     al, [ecx]
+    18 00000012 84C0                        test    al, al
+    19 00000014 7424                        jz      remove
+    20                                  
+    21 00000016 3C30                        cmp     al, '0'
+    22 00000018 7213                        jb      next_not_digit
+    23 0000001A 3C39                        cmp     al, '9'
+    24 0000001C 770F                        ja      next_not_digit
+    25                                  
+    26 0000001E 84E4                        test    ah, ah
+    27 00000020 7502                        jnz     update_current
+    28 00000022 89CA                        mov     edx, ecx
+    29                                  
+    30                                  update_current:
+    31 00000024 FEC4                        inc     ah
+    32 00000026 38FC                        cmp     ah, bh
+    33 00000028 770A                        ja      update_longest
+    34                                  
+    35                                  next:
+    36 0000002A 41                          inc     ecx
+    37 0000002B EBE3                        jmp     calculate_longest
+    38                                  
+    39                                  next_not_digit:
+    40 0000002D 41                          inc     ecx
+    41 0000002E 30E4                        xor     ah, ah
+    42 00000030 38FC                        cmp     ah, bh
+    43 00000032 72DC                        jb      calculate_longest
+    44                                  
+    45                                  update_longest: 
+    46 00000034 88E7                        mov     bh, ah
+    47 00000036 89D6                        mov     esi, edx
+    48 00000038 EBF0                        jmp     next
+    49                                  
+    50                                  remove:
+    51 0000003A 84FF                        test    bh, bh
+    52 0000003C 7413                        jz      finish
+    53 0000003E 89F1                        mov     ecx, esi
+    54 00000040 84FF                        test    bh, bh
+    55 00000042 7409                        jz      finalise
+    56 00000044 FECF                        dec     bh
+    57                                  
+    58                                  remove_loop:
+    59 00000046 41                          inc     ecx
+    60 00000047 FECF                        dec     bh
+    61 00000049 84FF                        test    bh, bh
+    62 0000004B 75F9                        jnz     remove_loop
+    63                                  
+    64                                  
+    65                                  finalise: 
+    66 0000004D C6410100                    mov     byte [ecx + 1], 0
+    67                                  
+    68                                  finish: 
+    69 00000051 89F0                        mov     eax, esi
+    70 00000053 5E                          pop     esi
+    71 00000054 5B                          pop     ebx
+    72 00000055 5D                          pop     ebp 
+    73 00000056 C3                          ret

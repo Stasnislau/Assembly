@@ -1,0 +1,33 @@
+     1                                      section .text
+     2                                      global  change_string
+     3                                  change_string:
+     4 00000000 55                          push    ebp             ; save caller's frame pointer
+     5 00000001 89E5                        mov     ebp, esp
+     6                                  
+     7 00000003 8B4D08                      mov     ecx, [ebp + 8]
+     8 00000006 53                          push    ebx
+     9                                  
+    10 00000007 31DB                        xor     ebx, ebx
+    11                                  
+    12                                  
+    13                                  traverse: 
+    14 00000009 8A01                        mov     al, [ecx]
+    15 0000000B 84C0                        test    al, al
+    16 0000000D 7411                        jz      finish
+    17 0000000F 43                          inc     ebx
+    18 00000010 83FB03                      cmp     ebx, 3
+    19 00000013 7403                        je      change
+    20 00000015 41                          inc     ecx
+    21 00000016 EBF1                        jmp     traverse
+    22                                  change:
+    23 00000018 C60178                      mov     byte [ecx], 'x'
+    24 0000001B 31DB                        xor     ebx, ebx 
+    25 0000001D 41                          inc     ecx
+    26 0000001E EBE9                        jmp     traverse
+    27                                  
+    28                                  finish:
+    29 00000020 5B                          pop     ebx
+    30                                      ; mov     eax, ecx        
+    31 00000021 8B4508                      mov     eax, [ebp+8]    ; return the original arg
+    32 00000024 5D                          pop     ebp             ; restore caller's frame pointer
+    33 00000025 C3                          ret   

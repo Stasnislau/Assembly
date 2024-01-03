@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void emphasize8(void *img, int width, int height);
+
+int main()
+{
+    int width, height;
+    char *img;
+
+    // open file "test.bmp"
+    FILE *fp = fopen("test.bmp", "rb");
+    if (fp == NULL) {
+        printf("Error: cannot open file\n");
+        return 1;
+    }
+
+    // read file header
+    char *file_header = (char *)malloc(54);
+    fread(file_header, 1, 54, fp);
+    int fileSize = *(int *)(file_header + 2);
+    int fileHeight = *(int *)(file_header + 22); 
+    int fileWidth = *(int *)(file_header + 18);  
+    printf("file size: %d\n", fileSize);
+    printf("file width: %d\n", fileWidth);
+    printf("file height: %d\n", fileHeight);
+
+    // read image data
+    img = (char *)malloc(fileSize - 54);
+    fread(img, 1, fileSize - 54, fp);
+    fclose(fp);
+
+    // emphasize8(img, width, height);
+
+    fp = fopen("output.bmp", "wb");
+    fwrite(file_header, 1, 54, fp);
+    fwrite(img, 1, fileSize - 54, fp);
+
+    return 0;
+}

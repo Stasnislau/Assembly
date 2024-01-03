@@ -1,0 +1,36 @@
+     1                                      section .text
+     2                                      global  change_string
+     3                                  change_string:
+     4 00000000 55                          push    ebp
+     5 00000001 89E5                        mov     ebp, esp
+     6 00000003 53                          push    ebx
+     7 00000004 8B4D08                      mov     ecx, [ebp + 8]
+     8                                  
+     9                                  traverse: 
+    10 00000007 89CB                        mov     ebx, ecx
+    11 00000009 8A01                        mov     al, [ecx]
+    12 0000000B 84C0                        test    al, al   
+    13 0000000D 741B                        jz      finish
+    14 0000000F 3A450C                      cmp     al, [ebp + 12]
+    15 00000012 7213                        jb      next
+    16 00000014 3A4510                      cmp     al, [ebp + 16]
+    17 00000017 770E                        ja      next
+    18                                  
+    19                                  shift_left:
+    20 00000019 8A5301                      mov     dl, [ebx + 1]
+    21 0000001C 8813                        mov     byte [ebx], dl
+    22 0000001E 8A03                        mov     al, [ebx]
+    23 00000020 84C0                        test    al, al
+    24 00000022 74E3                        jz      traverse
+    25 00000024 43                          inc     ebx
+    26 00000025 EBF2                        jmp     shift_left
+    27                                  
+    28                                  next: 
+    29 00000027 41                          inc     ecx
+    30 00000028 EBDD                        jmp     traverse
+    31                                  
+    32                                  finish: 
+    33 0000002A 8B4508                      mov     eax, [ebp + 8]
+    34 0000002D 5B                          pop     ebx
+    35 0000002E 5D                          pop     ebp 
+    36 0000002F C3                          ret
