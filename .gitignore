@@ -1,2 +1,6 @@
 x86/x32/project2/test.bmp
 x86/x32/project2/output.bmp
+x86/x32/project2/program.o
+x86/x32/project2/program.lst
+x86/x32/project2/main.o
+x86/x32/project2/main

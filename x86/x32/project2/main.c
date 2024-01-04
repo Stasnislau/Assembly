@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void emphasize8(void *img, int width, int height, int stride);
+int emphasize8(void *img, int width, int height, int stride);
 
 int main()
 {
@@ -10,7 +10,8 @@ int main()
 
     // open file "test.bmp"
     FILE *fp = fopen("test.bmp", "rb");
-    if (fp == NULL) {
+    if (fp == NULL)
+    {
         printf("Error: cannot open file\n");
         return 1;
     }
@@ -19,7 +20,7 @@ int main()
     char *file_header = (char *)malloc(54);
     fread(file_header, 1, 54, fp);
     int fileSize = *(int *)(file_header + 2);
-    int fileHeight = *(int *)(file_header + 22); 
+    int fileHeight = *(int *)(file_header + 22);
     int fileWidth = *(int *)(file_header + 18);
     int stride = (fileWidth * 8 + 31) / 32 * 4;
     printf("file size: %d\n", fileSize);
@@ -32,7 +33,9 @@ int main()
     fread(img, 1, fileSize - 54, fp);
     fclose(fp);
 
-    emphasize8(img, width, height, stride);
+    unsigned int result = emphasize8(img, fileWidth, fileHeight, stride);
+    // print as unsigned number
+    printf("result: %u\n", result);
 
     fp = fopen("output.bmp", "wb");
     fwrite(file_header, 1, 54, fp);
