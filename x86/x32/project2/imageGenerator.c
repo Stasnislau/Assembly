@@ -18,7 +18,6 @@ int main()
     }
 
     int stride = (width + 3) / 4 * 4; // Each row is padded to a multiple of 4 bytes
-
     // Create and write the BMP header
     unsigned char file_header[54] = {'B', 'M'};
     *(int *)(file_header + 2) = 54 + 256 * 4 + stride * height; // File size
@@ -55,14 +54,15 @@ int main()
     // Generate the random pixel values
     int maxGenerated = 0;
     int minGenerated = 255;
+    int offset = stride - width;
     for (int i = 0; i < stride * height; i++)
     {
-        if (i % stride == 0)
-            for (int j = 0; j < stride - width; j++, i++)
+        if (offset != 0 && i % width == 0 && i != 0)
+            for (int j = 0; j < offset; j++, i++)
                 img[i] = 0;
         else
-        {
             img[i] = (unsigned char)(rand() % (256 - 2 * boundary) + boundary);
+        {
             if (img[i] > maxGenerated)
                 maxGenerated = img[i];
             if (img[i] < minGenerated)
