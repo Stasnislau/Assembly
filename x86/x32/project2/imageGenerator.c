@@ -25,7 +25,7 @@ int main()
     *(int *)(file_header + 10) = 54 + 256 * 4;                  // Offset to bitmap data
     *(int *)(file_header + 14) = 40;                            // Size of BITMAPINFOHEADER
     *(int *)(file_header + 18) = width;                         // Image width
-    *(int *)(file_header + 22) = height;                       // Image height 
+    *(int *)(file_header + 22) = height;                        // Image height
     *(short *)(file_header + 26) = 1;                           // Number of color planes
     *(short *)(file_header + 28) = 8;                           // Bits per pixel
     *(int *)(file_header + 34) = stride * height;               // Size of bitmap data
@@ -53,13 +53,24 @@ int main()
     }
 
     // Generate the random pixel values
-    for (int i = 0; i < height; i++)
+    int maxGenerated = 0;
+    int minGenerated = 255;
+    for (int i = 0; i < stride * height; i++)
     {
-        for (int j = 0; j < width; j++)
+        if (i % stride == 0)
+            for (int j = 0; j < stride - width; j++, i++)
+                img[i] = 0;
+        else
         {
-            img[i * stride + j] = (unsigned char)(rand() % (256 - boundary) + boundary);
+            img[i] = (unsigned char)(rand() % (256 - 2 * boundary) + boundary);
+            if (img[i] > maxGenerated)
+                maxGenerated = img[i];
+            if (img[i] < minGenerated)
+                minGenerated = img[i];
         }
     }
+    printf("maxGenerated: %d\n", maxGenerated);
+    printf("minGenerated: %d\n", minGenerated);
 
     fwrite(img, 1, stride * height, fp);
 
