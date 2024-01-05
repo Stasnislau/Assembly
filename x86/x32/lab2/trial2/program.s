@@ -45,7 +45,7 @@ traverse_digits:
     inc     ecx
     sub     edx, '0'
     imul    eax, 10
-    add     eax, edx ; segmantation fault here
+    add     eax, edx 
     jmp     traverse_digits
 
 finish: 

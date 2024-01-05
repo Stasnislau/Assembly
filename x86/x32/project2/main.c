@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int emphasize8(void *img, int width, int height, int stride);
+int emphasize8(char *img, int width, int height, int stride);
 
 int main()
 {
     int width, height;
     char *img;
 
-    // open file "test.bmp"
-    FILE *fp = fopen("test.bmp", "rb");
+
+    FILE *fp = fopen("generatedTest.bmp", "rb");
     if (fp == NULL)
     {
         printf("Error: cannot open file\n");
@@ -22,7 +22,7 @@ int main()
     int fileSize = *(int *)(file_header + 2);
     int fileHeight = *(int *)(file_header + 22);
     int fileWidth = *(int *)(file_header + 18);
-    int stride = (fileWidth * 8 + 31) / 32 * 4;
+    int stride = (fileWidth + 3) / 4 * 4;
     printf("file size: %d\n", fileSize);
     printf("file width: %d\n", fileWidth);
     printf("file height: %d\n", fileHeight);

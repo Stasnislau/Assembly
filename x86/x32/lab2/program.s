@@ -14,7 +14,6 @@ change_string: ; we recieve a string and a number, need put all the numbers to t
     mov     eax, [ebp + 12]
 
     test    eax, eax
-    js      negative
 
 convert_loop:
     xor edx, edx
@@ -56,34 +55,4 @@ return:
     pop    ebp  
     ret
 
-negative:
-    mov     esi, 1
-    jmp     convert_loop
-
-add_minus: 
-    mov     ebx, [ebp + 8]
-    mov     esi, [ebx]
-    mov     byte [ebx], '-'
-
-go_to_end:
-    inc     ebx
-    test    ebx, ebx
-    jnz     go_to_end
-    dec     ebx
-    mov     al, [ebx]
-    mov     byte [ebx + 1], al
-    mov     byte [ebx], 0
-
-shift_right: 
-    mov  al, [ebx-1]
-    cmp  al, '-'
-    je   add_remaining_number
-    mov  byte [ebx], al
-    mov  byte [ebx-1], 0
-    dec  ebx
-    
-add_remaining_number:
-    mov     al, [esi]
-    mov     byte [ebx], al
-    jmp     return
 
