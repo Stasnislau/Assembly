@@ -1,10 +1,6 @@
-x86/x32/project2/test.bmp
-x86/x32/project2/output.bmp
-x86/x32/project2/program.o
-x86/x32/project2/program.lst
-x86/x32/project2/main.o
+*.bmp
+*.o
+*.lst
 x86/x32/project2/main
-x86/x32/project2/generatedTest.bmp
-x86/x32/project2/program.lst
-x86/x32/project2/jacket1.bmp
 x86/x32/project2/imageGenerator
+x86/x64/project3/imageGenerator

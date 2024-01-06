@@ -1,6 +1,6 @@
     section .text 
     global  emphasize8
-emphasize8: ; 32-bit version
+emphasize8: ; 64-bit version
 
     push    ebp
     mov     ebp, esp
