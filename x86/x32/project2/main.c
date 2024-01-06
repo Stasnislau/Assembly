@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int emphasize8(char *img, int width, int height, int stride);
+void emphasize8(char *img, int width, int height, int stride);
 
 int main()
 {
@@ -33,9 +33,7 @@ int main()
     fread(img, 1, fileSize - 54, fp);
     fclose(fp);
 
-    unsigned int result = emphasize8(img, fileWidth, fileHeight, stride);
-    // print as unsigned number
-    printf("result: %u\n", result);
+    emphasize8(img, fileWidth, fileHeight, stride);
 
     fp = fopen("output.bmp", "wb");
     fwrite(file_header, 1, 54, fp);

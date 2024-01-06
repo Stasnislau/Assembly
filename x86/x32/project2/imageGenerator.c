@@ -7,7 +7,7 @@ int main()
     srand(time(NULL));
     int width = 1020;
     int height = 1020;
-    const int boundary = 20;
+    const int boundary = 80;
     char *file_name = "generatedTest.bmp";
 
     FILE *fp = fopen(file_name, "wb");
