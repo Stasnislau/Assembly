@@ -53,7 +53,7 @@ set_white:
 detect_end_of_row:
     test  ecx, ecx 
     jz    finish_traverse
-    mov   dh, 0
+    xor   dh, dh
     dec   ecx 
     test  ecx, ecx 
     jz    finish_traverse
@@ -80,10 +80,10 @@ change_traverse:
     xor   edx, edx
     mov   dl, bl 
     sub   dl, bh 
-    push  ebx 
-    mov   ebx, edx 
+    push  ebx  
+    mov   ebx, edx  
     xor   edx, edx
-    div   ebx
+    div   ebx ; eax = (pixel value - darkest shade) * 255 / (lightest shade - darkest shade)
     pop   ebx 
     mov   [esi], al 
     inc   esi  
