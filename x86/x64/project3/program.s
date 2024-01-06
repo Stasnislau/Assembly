@@ -13,10 +13,10 @@ emphasize8: ; 64-bit version
     add r10, 1024 ; skip the first 1024 bytes of the image
 
 find_traverse:
-    test r11, r11 ; if width == 0
+    test r11, r11 
     jz detect_end_of_row
     xor rax, rax
-    mov al, [r10] ; load pixel value
+    mov al, [r10]
     cmp rax, r15
     jb set_black
     cmp rax, r14
@@ -51,7 +51,7 @@ detect_end_of_row:
     test r12, r12
     jz finish_traverse
     add r10, r13 ; image pointer + offset to next row
-    mov r11, rsi ; image width
+    mov r11, rsi
     jmp find_traverse
 
 finish_traverse:
@@ -66,11 +66,11 @@ change_traverse:
     xor rax, rax
     mov al, [r10]
     sub rax, r15 ; al = pixel value - darkest shade
-    mov rdx, 255 ; edx = 255
+    mov rdx, 255
     mul rdx ; eax = (pixel value - darkest shade) * 255
     xor rdx, rdx
-    mov r8, r14 ; r8 = lightest shade
-    sub r8, r15 ; r8 = lightest shade - darkest shade
+    mov r8, r14 ;
+    sub r8, r15 ;
     div r8 ; eax = (pixel value - darkest shade) * 255 / (lightest shade - darkest shade)
     mov [r10], al
     inc r10
@@ -87,19 +87,6 @@ detect_end_of_row_change:
     add r10, r13 ; image pointer + offset to next row
     mov r11, rsi ; image width
     jmp change_traverse
-
-
-; detect_end_of_row_change:
-;     test  ecx, ecx 
-;     jz    return
-;     dec   ecx 
-;     test  ecx, ecx 
-;     jz    return
-;     mov   edx, [ebp + 20] ; stride
-;     mov   edi, [ebp + 12] ; width
-;     sub   edx, edi ; stride - width, offset to next row
-;     add   esi, edx ; image pointer + offset to next row
-;     jmp   change_traverse
 
 return:
     mov    rax, rdi
