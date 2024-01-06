@@ -5,7 +5,7 @@
 int main()
 {
     srand(time(NULL));
-    int width = 1020;
+    int width = 521;
     int height = 1020;
     const int boundary = 80;
     char *file_name = "generatedTest.bmp";
@@ -55,18 +55,23 @@ int main()
     int maxGenerated = 0;
     int minGenerated = 255;
     int offset = stride - width;
-    for (int i = 0; i < stride * height; i++)
+    for (int i = 0; i < height; i++)
     {
-        if (offset != 0 && i % width == 0 && i != 0)
-            for (int j = 0; j < offset; j++, i++)
-                img[i] = 0;
-        else
-            img[i] = (unsigned char)(rand() % (256 - 2 * boundary) + boundary);
+        for (int j = 0; j < width; j++)
         {
-            if (img[i] > maxGenerated)
-                maxGenerated = img[i];
-            if (img[i] < minGenerated)
-                minGenerated = img[i];
+            int index = i * stride + j;
+            img[index] = (unsigned char)(rand() % (256 - 2 * boundary) + boundary);
+
+            if (img[index] > maxGenerated)
+                maxGenerated = img[index];
+            if (img[index] < minGenerated)
+                minGenerated = img[index];
+        }
+
+        for (int j = width; j < stride; j++)
+        {
+            int index = i * stride + j;
+            img[index] = 0;
         }
     }
     printf("maxGenerated: %d\n", maxGenerated);
