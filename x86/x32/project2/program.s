@@ -16,10 +16,9 @@ emphasize8: ; 32-bit version
     xor     ebx, ebx ; upper part is darkest, lower part is lightest
     mov     bh, 0xff ; darkest shade, initially lightest possible
     mov     bl, 0x00 ; lightest shade, initially darkest possible
-    add     esi, 1024 ; skip the first 1024 bytes of the image
 
 find_traverse: 
-    test  eax, eax ; if width == 0
+    test  eax, eax 
     jz    detect_end_of_row
     mov   dh, [esi] ; load pixel value
     cmp   dh, bh 
@@ -64,7 +63,6 @@ detect_end_of_row:
 
 finish_traverse:
     mov   esi, [ebp + 8] ; image pointer
-    add   esi, 1024 ; skip the palette
     mov   edi, [ebp + 12] ; image width
     mov   ecx, [ebp + 16] ; image height
 

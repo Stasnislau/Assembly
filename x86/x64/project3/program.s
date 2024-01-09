@@ -10,7 +10,6 @@ emphasize8: ; 64-bit version
     xor r15, r15 ; darkest shade, initially lightest possible
     mov r14, 0
     mov r15, 255
-    add r10, 1024 ; skip the first 1024 bytes of the image
 
 find_traverse:
     test r11, r11 
@@ -56,7 +55,6 @@ detect_end_of_row:
 
 finish_traverse:
     mov r10, rdi ; image pointer
-    add r10, 1024 ; skip the palette
     mov r11, rsi ; image width
     mov r12, rdx ; image height
 
