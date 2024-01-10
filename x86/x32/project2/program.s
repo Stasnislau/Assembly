@@ -32,21 +32,11 @@ find_traverse:
 
 set_black:
     mov   bh, dh 
-    cmp   dh, bl 
-    ja    set_white
-    dec   eax 
-    test  eax, eax
-    jz    detect_end_of_row
-    inc   esi 
     jmp   find_traverse
     
 
 set_white:
     mov   bl, dh
-    dec   eax 
-    test  eax, eax 
-    jz    detect_end_of_row
-    inc   esi 
     jmp   find_traverse
 
 detect_end_of_row:
