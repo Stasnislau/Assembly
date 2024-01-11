@@ -1,6 +1,11 @@
     section .text 
     global  emphasize8
 emphasize8: ; 64-bit version
+    push r11
+    push r12
+    push r13
+    push r14
+    push r15
     mov r10, rdi ; image pointer
     mov r11, rsi ; image width
     mov r12, rdx ; image height
@@ -26,20 +31,10 @@ find_traverse:
 
 set_black:
     mov r15, rax
-    cmp rax, r14 
-    ja set_white
-    dec r11
-    test r11, r11
-    jz detect_end_of_row
-    inc r10
     jmp find_traverse
 
 set_white:
     mov r14, rax
-    dec r11
-    test r11, r11
-    jz detect_end_of_row
-    inc r10
     jmp find_traverse
 
 detect_end_of_row:
@@ -87,5 +82,10 @@ detect_end_of_row_change:
     jmp change_traverse
 
 return:
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop r11
     mov    rax, rdi
     ret
