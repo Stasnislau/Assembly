@@ -16,39 +16,29 @@ emphasize8: ; 32-bit version
     xor     ebx, ebx ; upper part is darkest, lower part is lightest
     mov     bh, 0xff ; darkest shade, initially lightest possible
     mov     bl, 0x00 ; lightest shade, initially darkest possible
-
+ 
 find_traverse: 
-    test  eax, eax 
-    jz    detect_end_of_row
     mov   dh, [esi] ; load pixel value
     cmp   dh, bh 
-    jb    set_black
-    cmp   dh, bl
-    ja    set_white
-    inc   esi 
-    dec   eax 
-    jmp   find_traverse
-
-
-set_black:
-    mov   bh, dh 
-    jmp   find_traverse
+    jae   skip_to_white
+    mov   bh, dh
     
-
-set_white:
+skip_to_white:
+    cmp   dh, bl
+    jbe   skip
     mov   bl, dh
-    jmp   find_traverse
+
+skip: 
+    inc   esi 
+    dec   eax
+    jnz   find_traverse
 
 detect_end_of_row:
-    test  ecx, ecx 
-    jz    finish_traverse
     xor   dh, dh
-    dec   ecx 
-    test  ecx, ecx 
-    jz    finish_traverse
     add   esi, edx ; image pointer + offset to next row
     mov   eax, [ebp + 12] ; width
-    jmp   find_traverse
+    dec   ecx
+    jnz   find_traverse
 
 
 finish_traverse:
@@ -58,8 +48,6 @@ finish_traverse:
 
 
 change_traverse: 
-    test  edi, edi 
-    jz    detect_end_of_row_change
     xor   eax, eax
     mov   al, [esi] 
     sub   al, bh ; al = pixel value - darkest shade
@@ -76,20 +64,16 @@ change_traverse:
     mov   [esi], al 
     inc   esi  
     dec   edi 
-    jmp   change_traverse
+    jnz   change_traverse
 
 
 detect_end_of_row_change:
-    test  ecx, ecx 
-    jz    return
-    dec   ecx 
-    test  ecx, ecx 
-    jz    return
     mov   edx, [ebp + 20] ; stride
     mov   edi, [ebp + 12] ; width
     sub   edx, edi ; stride - width, offset to next row
     add   esi, edx ; image pointer + offset to next row
-    jmp   change_traverse
+    dec   ecx 
+    jnz   change_traverse
 
 return:
     mov    eax, [ebp + 8]
