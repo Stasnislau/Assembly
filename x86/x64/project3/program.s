@@ -19,14 +19,14 @@ emphasize8: ; 64-bit version
     xor     bx, bx ;  upper part is darkest, lower part is lightest
     mov     bh, 0xff ; darkest shade, initially lightest possible
     mov     bl, 0x00 ; lightest shade, initially darkest possible
-    xor     r9, r9
+    xor     r9d, r9d
     movzx   r9d, dl ; image stride
 
 find_traverse: 
     mov   dl, [r10] ; load pixel value
     cmp   dl, bh 
     jae   skip_to_white
-    mov   bh, dh
+    mov   bh, dl
 
 skip_to_white:
     cmp   dl, bl
